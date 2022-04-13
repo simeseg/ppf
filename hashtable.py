@@ -15,16 +15,23 @@ class HashTable:
         return len(self.values)
     
     def _index(self, key):
-        return self.hash(key)%len(self)
+        return self.hash_(key)%len(self)
     
-    def hash(self, key):
+    def hash_(self, key):
         d, alpha, beta, gamma = key[0], key[1], key[2], key[3]
-        return int(d + 2*alpha + 3*beta + 4*gamma) 
+        
+        return hash(100*d + 200*alpha + 300*beta + 400*gamma) 
     
     def __setitem__(self, key, value):
-        self.values[self._index(key)] = value
+        index = self._index(key)
+        print(index, value)
+        if self.values[index] is BLANK:
+            self.values[index] = [value]
+        else:
+            self.values[index] += [value]
         
     def __getitem__(self, key):
+        print(self._index(key))
         value = self.values[self._index(key)]
         if value is BLANK:
             raise KeyError(key)

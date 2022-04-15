@@ -20,7 +20,7 @@ class HashTable:
     def hash_(self, key):
         d, alpha, beta, gamma = key[0], key[1], key[2], key[3]
         
-        return hash(100*d + 200*alpha + 300*beta + 400*gamma) 
+        return hash(1000*d + 2000*alpha + 3000*beta + 4000*gamma) 
     
     def __setitem__(self, key, value):
         index = self._index(key)
@@ -31,10 +31,9 @@ class HashTable:
             self.values[index] += [value]
         
     def __getitem__(self, key):
-        print(self._index(key))
         value = self.values[self._index(key)]
         if value is BLANK:
-            raise KeyError(key)
+            return None
         return value
     
     def __contains__(self, key):

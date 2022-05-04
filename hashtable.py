@@ -5,6 +5,8 @@ Created on Tue Apr 12 11:01:06 2022
 @author: IntekPlus
 """
 
+import mmh3
+
 BLANK = object()
 
 class HashTable:
@@ -15,7 +17,8 @@ class HashTable:
         return len(self.values)
     
     def _index(self, key):
-        return self.hash_(key)%len(self)
+        #return self.hash_(key)%len(self)
+        return mmh3.hash(key)%len(self)
     
     def hash_(self, key):
         d, alpha, beta, gamma = key[0], key[1], key[2], key[3]

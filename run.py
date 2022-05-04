@@ -4,18 +4,18 @@ Created on Tue Apr 12 11:01:06 2022
 
 @author: IntekPlus
 """
-
+import numpy as np
 from voting import voting
 from ppf import ppf
+from viz import viz
 
 
-model_filename = "./BunnyData/bun000_Unstructured.pcd"
-scene_filename = "./BunnyData/bun045_Unstructured.pcd"
-hashtable_filename = "hashtable_bunny.txt"
-model_ppf = ppf(model_filename, 0.03, hashtable_filename, True)
-scene_ppf = ppf(scene_filename, 0.03)
+model_filename = "./BoltData/bolt_model.pcd"
+scene_filename = "./BoltData/boltclip0.pcd"
+hashtable_filename = "hashtable_bolt.txt"
+model_ppf = ppf(model_filename, 5, hashtable_filename, True)
+scene_ppf = ppf(scene_filename, 5)
 
-vote = voting(model_ppf, scene_ppf, 1)
-vote.vote()
-t, R = vote.get_pose()
-print(t, R)
+vote = voting(model_ppf, scene_ppf, int(scene_ppf.size/5))
+print(vote.R, vote.t)
+

@@ -8,7 +8,6 @@ Created on Tue Apr 12 11:01:06 2022
 import numpy as np
 import open3d as o3d
 from hashtable import HashTable, BLANK
-import re
 
 class ppf():
     def __init__(self, cloud_filename, voxel_size, hashtable_filename = None, make_table = False):
@@ -23,15 +22,16 @@ class ppf():
         self.size = self.points.shape[0]
         
         #distance and angle steps
-        self.distance_steps = 100
-        self.d_dist = 1.0
-        self.angle_steps = 20
+        self.distance_sampling_rate = 0.05
+        self.model_diameter = np.max(np.max(self.points, axis=0) - np.min(self.points, axis=0))
+        self.d_dist = self.distance_sampling_rate*self.model_diameter
+        self.angle_steps = 30
         self.d_angle = 2*np.pi/self.angle_steps
-        self.hashtable_filename = hashtable_filename
-        self.hashtable = HashTable(capacity = (self.angle_steps)**3) 
         
         if make_table:
             try:
+                self.hashtable_filename = hashtable_filename
+                self.hashtable = HashTable(capacity = (self.angle_steps)**3) 
                 self.read_and_parse_hash_file()
                 print("Read ", self.hashtable_filename)
             except OSError:
@@ -69,6 +69,10 @@ class ppf():
         vec2 = vec2/np.linalg.norm(vec2)
         ang = np.arccos(np.dot(vec1, vec2))
         return ang%np.pi
+        #cross =  np.linalg.norm(np.cross(vec1, vec2))
+        #dot = np.dot(vec1, vec2)
+        #print("cross", cross, dot)
+        #return np.arctan2(cross, dot)%np.pi
     
     def get_ppf(self, idx1, idx2):
         
